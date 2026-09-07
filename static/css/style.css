@@ -6,23 +6,27 @@
 
 :root {
     --ink: #1c1917;
-    --paper: #faf6f0;
-    --accent: #d95d39;
-    --accent-dark: #a8442a;
-    --line: #e3d9c9;
-    --text-muted: #6b6459;
-    --radius: 4px;
+    --paper: #f5eea0; /*pika suka kuning */
+    --accent: #ff4081;
+    --accent-dark: #c51162;
+    --line: #b5b4f8;
+    --text-muted: #594a4e;
+    --radius: 12px; 
 }
 
 body {
-    font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: "Plus Jakarta Sans", -apple-system, sans-serif;
     color: var(--ink);
     background-color: var(--paper);
+
+    background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1.5px, transparent 1.5px);
+    background-size: 24px 24px; /*motif lucu/*/
+
     line-height: 1.6;
 }
 
-h1, .brand {
-    font-family: "Space Grotesk", -apple-system, sans-serif;
+h1, .brand, .section-title {
+    font-family: "Caveat", cursive;
 }
 
 .container {
@@ -154,7 +158,7 @@ h1, .brand {
     width: 100%;
     height: 100%;
     background-color: var(--accent);
-    border-radius: var(--radius);
+    border-radius: 50%;
     z-index: 0;
 }
 
@@ -165,7 +169,7 @@ h1, .brand {
     width: 100%;
     aspect-ratio: 1 / 1;
     object-fit: cover;
-    border-radius: var(--radius);
+    border-radius: 50%;
     border: 3px solid var(--ink);
 }
 
@@ -192,5 +196,52 @@ h1, .brand {
     .social-links {
         justify-content: flex-start;
     }
+}
+
+.portfolio-section {
+    padding: 4rem 0;
+    border-top: 2px dashed var(--accent); /* garis pembatas putus */
+}
+
+.section-title {
+    font-family: "Caveat", cursive;
+    font-size: 3rem;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+
+.card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.card {
+    background-color: #ffffff;
+    border: 2px solid var(--line);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 20px rgba(255, 64, 129, 0.15);
+    border-color: var(--accent);
+}
+
+.card-title {
+    font-size: 1.15rem;
+    color: var(--ink);
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+}
+
+.card-meta {
+    font-size: 0.95rem;
+    color: var(--text-muted);
+    line-height: 1.5;
 }
 
