@@ -1,10 +1,35 @@
-Nama : Adinda Pika Fauziah
+# My Portofolio
 
-NPM : 2506533646
+Nama: Adinda Pika Fauziah  
+NPM: 2506533646  
+Kelas: PBP F  
 
-Kelas : PBP F
+## Deskripsi
+
+Website ini merupakan portfolio pribadi yang dibuat sebagai bagian dari pembelajaran mata kuliah
+Pemrograman Berbasis Platform (PBP). 
+
+Portfolio ini menampilkan informasi pribadi, pendidikan, dan pengalaman organisasi
+serta kepanitiaan yang pernah saya tempuh atau ikuti. Pada Individual Assignment 1, saya mengembangkan website dari hasil Tutorial 01 dengan menambahkan section Education dan Experience yang masing-masing
+menampilkan beberapa item dalam bentuk card.
 
 
+### Tugas 1
+1. Pada website ini saya menggunakan elemen semantik HTML5 seperti <main>, <section>, <article>, dan <footer> Elemen <section> digunakan untuk memisahkan bagian-bagian utama portfolio (Profile, Education, dan Experience). Sementara itu, <article> digunakan untuk menampilkan setiap item pendidikan dan pengalaman secara individual. Penggunaan elemen semantik membantu saya membuat struktur static web menjadi lebih jelas dan juga terorganisir. 
 
-Branch development
+
+2. Tantangan utama dalam membuat responsive design adalah memastikan layout yang terlihat baik pada layar desktop & tetap nyaman digunakan pada layar yang lebih kecil. Pada desktop, bagian Profile menggunakan grid dengan dua kolom sehingga informasi dan foto dapat ditampilkan berdampingan. Namun, layout tersebut tidak cocok jika digunakan pada layar smartphone yang sempit. Untuk mengatasinya, saya menggunakan CSS Grid dan media query. Pada ukuran layar maksimal 600px, layout Profile diubah menjadi satu kolom dengan urutan identity, photo, kemudian details. Saya juga menggunakan auto-fit pada card grid agar jumlah kolom Education dan Experience dapat menyesuaikan lebar layar. Dalam mengevaluasi responsive design, saya memprioritaskan keterbacaan teks, ukuran foto, jarak antar elemen, serta memastikan card tidak melebihi lebar layar.
+
+
+3. Karena website yang dibuat saat ini merupakan static web, informasi di dalamnya masih ditulis secara langsung pada HTML. Salah satu keterbatasannya adalah ketika saya ingin mengubah atau menambahkan banyak data, perubahan harus dilakukan secara manual pada file HTML. Pada iterasi berikutnya, saya ingin menambahkan untuk mengelola data portfolio, misalnya data pendidikan, pengalaman, dan proyek dapat disimpan dalam database dan ditampilkan secara dinamis menggunakan Django. Saya juga ingin mengembangkan bagian Projects sehingga proyek-proyek yang pernah dikerjakan dapat ditambahkan dan diperbarui tanpa harus mengubah struktur HTML secara manual.
+
+### AI Disclosure
+Dalam pengerjaan Individual Assignment 1 ini, saya menggunakan ChatGPT untuk membantu memahami instruksi tugas dan juga membantu mengidentifikasi dan memperbaiki beberapa masalah pada kode.
+
+Saya tetap mengerjakan tugas dan menambahkan isi portfolio saya sendiri, termasuk menentukan informasi pendidikan dan pengalaman yang saya tmpilkan serta tampilan visual seperti warna, font, dan bentuk card.
+
+Saya menggunakan AI terutama melalui percakapan bertahap seperti saya memberikan kode, hasil command pada terminal, atau masalah yang saya temukan, kemudian menggunakan saran yang diberikan untuk menentukan langkah berikutnya. 
+
+Penggunaan AI membantu mempercepat proses debugging dan memberi pemahaman mengenai struktur HTML, CSS responsive, serta workflow Git. Namun, saya tetap perlu memeriksa hasil yang diberikan karena AI dapat memberikan saran yang tidak selalu sesuai dengan kondisi project saya. Contohnya, dalam proses pengerjaan saya menemukan masalah pada tampilan git diff di terminal dan kemudian menggunakan opsi --no-pager agar dapat memeriksa perubahan dengan lebih jelas.
+
 
