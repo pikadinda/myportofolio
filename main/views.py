@@ -10,7 +10,7 @@ def show_main(request):
     context = {
         "name": "Adinda Pika Fauziah",
         "npm": "2506533646",
-        "study_program": "S1 Sistem Informasi",
+        "study_program": "S1 Information Systems",
         "bio": (
             "Information Systems student at Universitas Indonesia."
             "Just a student who enjoys documenting life through photos, discovering great bakeries, and keeping things simple."
