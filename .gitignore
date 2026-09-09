@@ -1,10 +1,14 @@
 # Environments & Credentials
-env/
+
 venv/
+
 .env*
+
+env/
 
 # Django Database & Cache
 db.sqlite3
+
 __pycache__/
 *.pyc
 
