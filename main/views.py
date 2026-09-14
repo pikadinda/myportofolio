@@ -43,4 +43,8 @@ def show_interests(request):
     }
     return render(request, "interests.html", context)
 
-
+def show_education(request):
+    context = {
+        "name": "Adinda Pika Fauziah",
+    }
+    return render(request, "education.html", context)

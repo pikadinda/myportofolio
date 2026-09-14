@@ -44,6 +44,7 @@ h1, .brand, .section-title {
     justify-content: space-between;
     align-items: center;
     padding: 1.25rem 1.5rem;
+    gap: 2rem;
 }
 
 .brand {
@@ -55,13 +56,17 @@ h1, .brand, .section-title {
 
 .site-header nav {
     display: flex;
-    gap: 2rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .site-header nav a {
     color: var(--ink);
     text-decoration: none;
     font-size: 0.95rem;
+    white-space: nowrap;
+
 }
 
 .hero {
@@ -299,3 +304,159 @@ h1, .brand, .section-title {
     font-weight: 600;
 }
 
+
+/*skills & interests*/
+.skills-section,
+.interests-section {
+    padding: 4rem 0 5rem;
+}
+
+.skills-section h1,
+.interests-section h1 {
+    margin: 0.4rem 0 2rem;
+    font-size: clamp(2.8rem, 6vw, 4rem);
+    line-height: 1;
+}
+
+/* Grid */
+
+.skills-grid,
+.interests-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+}
+
+/* Cards */
+
+.skill-card,
+.interest-card {
+    position: relative;
+    padding: 1.5rem;
+    background-color: #ffffff;
+    border: 2px solid var(--line);
+    border-radius: 12px;
+    transition: transform 0.2s ease,
+                box-shadow 0.2s ease,
+                border-color 0.2s ease;
+}
+
+/* Hover */
+
+.skill-card:hover,
+.interest-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 8px 8px 0 var(--accent);
+    border-color: var(--accent);
+}
+
+/* Category */
+
+.skill-category,
+.interest-category {
+    display: inline-block;
+    margin-bottom: 0.75rem;
+    padding: 0.3rem 0.7rem;
+    background-color: var(--paper);
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Title */
+
+.skill-card h2,
+.interest-card h2 {
+    margin-bottom: 0.65rem;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.3rem;
+    line-height: 1.3;
+}
+
+/* Description */
+
+.skill-description,
+.interest-description {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+/* Skill level */
+
+.skill-level {
+    display: inline-block;
+    margin-top: 1.25rem;
+    padding: 0.45rem 0.8rem;
+    color: #ffffff;
+    background-color: var(--ink);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Interest note */
+
+.interest-note {
+    margin-top: 1.25rem;
+    color: var(--accent-dark);
+    font-family: "Caveat", cursive;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* Empty state */
+
+.empty-state {
+    padding: 2rem;
+    text-align: center;
+    color: var(--text-muted);
+    border: 2px dashed var(--line);
+    border-radius: var(--radius);
+}
+
+/* Playful rotation */
+
+.skill-card:nth-child(2),
+.interest-card:nth-child(2) {
+    transform: rotate(1deg);
+}
+
+.skill-card:nth-child(3),
+.interest-card:nth-child(3) {
+    transform: rotate(-1deg);
+}
+
+.skill-card:nth-child(4),
+.interest-card:nth-child(4) {
+    transform: rotate(1deg);
+}
+
+/* Hover after rotation */
+
+.skill-card:nth-child(n):hover,
+.interest-card:nth-child(n):hover {
+    transform: translateY(-6px) rotate(0deg);
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+    .skills-grid,
+    .interests-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .skill-card:nth-child(n),
+    .interest-card:nth-child(n) {
+        transform: none;
+    }
+
+    .skill-card:nth-child(n):hover,
+    .interest-card:nth-child(n):hover {
+        transform: translateY(-4px);
+    }
+}
