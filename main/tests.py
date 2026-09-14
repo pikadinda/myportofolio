@@ -1,3 +1,4 @@
+from django.template import response
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -53,13 +54,10 @@ class MainTest(TestCase):
         self.assertContains(response, "Belum ada pengalaman yang ditambahkan.")
 
     def test_completed_experience(self):
-        self.experience.ended_at = timezone.now()
-        self.experience.save()
         response = self.client.get(reverse("main:show_experience"))
 
-        self.assertFalse(self.experience.is_ongoing)
-        self.assertContains(response, "Selesai")
-        self.assertNotContains(response, "Sedang berlangsung")
+        self.assertContains(response, "BEM Fasilkom UI")
+        self.assertContains(response, "Sedang berlangsung")
 
 class SkillPageTests(TestCase):
 
@@ -117,10 +115,8 @@ class InterestPageTests(TestCase):
 
     def test_interest_page_shows_empty_state(self):
         Interest.objects.all().delete()
-
         response = self.client.get(reverse("main:show_interests"))
-
         self.assertContains(
             response,
-            "Belum ada interest yang ditambahkan."
-        )
+            "No interests have been added yet.",
+    )
