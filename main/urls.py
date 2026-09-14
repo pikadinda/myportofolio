@@ -1,10 +1,12 @@
 from django.urls import path
 
-from main.views import show_main, show_experience
+from . import views
 
 app_name = "main"
 
 urlpatterns = [
-    path("", show_main, name="show_main"),
-    path("experience/", show_experience, name="show_experience"),
+    path("", views.show_main, name="show_main"),
+    path("experience/", views.show_experience, name="show_experience"),
+    path("skills/", views.show_skills, name="show_skills"),
+    path("interests/", views.show_interests, name="show_interests"),
 ]
