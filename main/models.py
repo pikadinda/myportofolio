@@ -27,3 +27,22 @@ class Experience(models.Model):
     @property
     def is_ongoing(self):
         return self.ended_at is None
+
+class Skill(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    level = models.CharField(max_length=50)
+    category = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+class Interest(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    category = models.CharField(max_length=50)
+    favorite_note = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.name
+
