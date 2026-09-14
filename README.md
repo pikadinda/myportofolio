@@ -23,6 +23,7 @@ menampilkan beberapa item dalam bentuk card.
 
 3. Karena website yang dibuat saat ini merupakan static web, informasi di dalamnya masih ditulis secara langsung pada HTML. Salah satu keterbatasannya adalah ketika saya ingin mengubah atau menambahkan banyak data, perubahan harus dilakukan secara manual pada file HTML. Pada iterasi berikutnya, saya ingin menambahkan untuk mengelola data portfolio, misalnya data pendidikan, pengalaman, dan proyek dapat disimpan dalam database dan ditampilkan secara dinamis menggunakan Django. Saya juga ingin mengembangkan bagian Projects sehingga proyek-proyek yang pernah dikerjakan dapat ditambahkan dan diperbarui tanpa harus mengubah struktur HTML secara manual.
 
+
 ### AI Disclosure
 Dalam pengerjaan Individual Assignment 1 ini, saya menggunakan ChatGPT untuk membantu memahami instruksi tugas dan juga membantu mengidentifikasi dan memperbaiki beberapa masalah pada kode.
 
@@ -31,5 +32,18 @@ Saya tetap mengerjakan tugas dan menambahkan isi portfolio saya sendiri, termasu
 Saya menggunakan AI terutama melalui percakapan bertahap seperti saya memberikan kode, hasil command pada terminal, atau masalah yang saya temukan, kemudian menggunakan saran yang diberikan untuk menentukan langkah berikutnya. 
 
 Penggunaan AI membantu mempercepat proses debugging dan memberi pemahaman mengenai struktur HTML, CSS responsive, serta workflow Git. Namun, saya tetap perlu memeriksa hasil yang diberikan karena AI dapat memberikan saran yang tidak selalu sesuai dengan kondisi project saya. Contohnya, dalam proses pengerjaan saya menemukan masalah pada tampilan git diff di terminal dan kemudian menggunakan opsi --no-pager agar dapat memeriksa perubahan dengan lebih jelas.
+
+
+### Tugas 2
+Jawaban dari Pertanyaan Reflektif
+1. Request dari URL akan diarahkan ke `urls.py`, lalu menuju view yang sesuai. View mengambil data dari model dan memasukkannya ke context, kemudian template menggunakan data tersebut untuk menghasilkan HTML yang ditampilkan ke user.
+
+2. Supaya data dan tampilan tidak tercampur. Data bisa diubah atau ditambah melalui database tanpa harus mengubah HTML, sehingga kode lebih rapi dan mudah dikelola.
+
+3. makemigrations digunakan untuk membuat file migration berdasarkan perubahan pada model. Sedangkan migrate digunakan untuk menerapkan migration tersebut ke database.
+
+### AI Disclosure
+Dalam pengerjaan tugas 02 ini, saya menggunakan ChatGPT sebagai alat bantu untuk debugging, menyusun unit test, dan memeriksa kelengkapan implementasi. Saya tetap melakukan implementasi, pengujian, dan verifikasi perubahan secara langsung pada project.
+
 
 

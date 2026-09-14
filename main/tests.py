@@ -2,7 +2,11 @@ from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
 
+from main.models import Skill
+
 from main.models import Experience
+
+from main.models import Interest
 
 
 class MainTest(TestCase):
@@ -56,3 +60,67 @@ class MainTest(TestCase):
         self.assertFalse(self.experience.is_ongoing)
         self.assertContains(response, "Selesai")
         self.assertNotContains(response, "Sedang berlangsung")
+
+class SkillPageTests(TestCase):
+
+    def test_skill_page_uses_correct_template(self):
+        response = self.client.get(reverse("main:show_skills"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "skills.html")
+
+    def test_skill_data_appears_on_page(self):
+        skill = Skill.objects.create(
+            name="Test Skill",
+            description="Test skill description.",
+            level="Strong",
+            category="Test",
+        )
+
+        response = self.client.get(reverse("main:show_skills"))
+
+        self.assertContains(response, skill.name)
+        self.assertContains(response, skill.description)
+        self.assertContains(response, skill.level)
+
+    def test_skill_page_shows_empty_state(self):
+        Skill.objects.all().delete()
+
+        response = self.client.get(reverse("main:show_skills"))
+
+        self.assertContains(
+            response,
+            "No skills have been added yet."
+        )
+
+class InterestPageTests(TestCase):
+
+    def test_interest_page_uses_correct_template(self):
+        response = self.client.get(reverse("main:show_interests"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "interests.html")
+
+    def test_interest_data_appears_on_page(self):
+        interest = Interest.objects.create(
+            name="Test Interest",
+            description="Test interest description.",
+            category="Test",
+            favorite_note="Test note",
+        )
+
+        response = self.client.get(reverse("main:show_interests"))
+
+        self.assertContains(response, interest.name)
+        self.assertContains(response, interest.description)
+        self.assertContains(response, interest.favorite_note)
+
+    def test_interest_page_shows_empty_state(self):
+        Interest.objects.all().delete()
+
+        response = self.client.get(reverse("main:show_interests"))
+
+        self.assertContains(
+            response,
+            "Belum ada interest yang ditambahkan."
+        )
