@@ -11,4 +11,6 @@ urlpatterns = [
     path("skills/", views.show_skills, name="show_skills"),
     path("interests/", views.show_interests, name="show_interests"),
     path("skills/add/", views.show_skill_form, name="show_skill_form"),
+    path("api/skills/", views.get_skills_json, name="get_skills_json"),
+    path("skills/<int:skill_id>/delete/", views.delete_skill, name="delete_skill"),
 ]

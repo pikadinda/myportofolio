@@ -17,6 +17,8 @@ Skills - Pika
                 <div class="skills-grid">
                     {% for skill in skill_list %}
                         <article class="skill-card">
+                            
+
                             <span class="skill-category">
                                 {{ skill.category }}
                             </span>
@@ -30,6 +32,15 @@ Skills - Pika
                             <p class="skill-level">
                                 {{ skill.level }}
                             </p>
+
+                            <button
+                                type="button"
+                                class="delete-button"
+                                onclick="openDeleteModal({{ skill.id }}, '{{ skill.name|escapejs }}')"
+                            >
+                                Delete
+                            </button>
+
                         </article>
                     {% empty %}
                         <p class="empty-state">
@@ -40,5 +51,49 @@ Skills - Pika
 
             </div>
         </section>
+
+        <div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <h2>Delete Skill?</h2>
+
+        <p>
+            Are you sure you want to delete
+            <strong id="deleteSkillName"></strong>?
+        </p>
+
+        <form id="deleteForm" method="POST">
+            {% csrf_token %}
+
+            <button type="button" onclick="closeDeleteModal()">
+                Cancel
+            </button>
+
+            <button type="submit">
+                Delete
+            </button>
+        </form>
+    </div>
+</div>
+
     </main>
+
+<script>
+    function openDeleteModal(skillId, skillName) {
+        const modal = document.getElementById("deleteModal");
+        const deleteForm = document.getElementById("deleteForm");
+        const deleteSkillName = document.getElementById("deleteSkillName");
+
+        deleteSkillName.textContent = skillName;
+        deleteForm.action = `/skills/${skillId}/delete/`;
+
+        modal.style.display = "flex";
+    }
+
+    function closeDeleteModal() {
+        const modal = document.getElementById("deleteModal");
+
+        modal.style.display = "none";
+    }
+</script>
+
 {% endblock content %}
