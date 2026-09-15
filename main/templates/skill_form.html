@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}
+Add Skill - Pika
+{% endblock title %}
+
+{% block content %}
+<section class="container">
+    <div class="section-header">
+        <p class="eyebrow">Add Skill</p>
+        <h1>Add a new skill</h1>
+        <p>Fill in the details below to add a new skill to the portfolio.</p>
+    </div>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">Add Skill</button>
+    </form>
+</section>
+{% endblock content %}
+

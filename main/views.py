@@ -1,10 +1,11 @@
 
 
 # Create your views here.
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from main.models import Experience, Skill, Interest
 
+from .forms import SkillForm
 
 def show_main(request):
     context = {
@@ -35,6 +36,24 @@ def show_skills(request):
     }
     return render(request, "skills.html", context)
 
+def show_skill_form(request):
+    form = SkillForm()
+
+    if request.method == "POST":
+        form = SkillForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect("main:show_skills")
+
+    context = {
+        "name": "Adinda Pika Fauziah",
+        "form": form,
+    }
+
+    return render(request, "skill_form.html", context)
+
+
 
 def show_interests(request):
     context = {
@@ -48,3 +67,5 @@ def show_education(request):
         "name": "Adinda Pika Fauziah",
     }
     return render(request, "education.html", context)
+
+
