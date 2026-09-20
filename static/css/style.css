@@ -237,6 +237,7 @@ h1, .brand, .section-title {
     border-color: var(--accent);
 }
 
+
 .card-title {
     font-size: 1.15rem;
     color: var(--ink);

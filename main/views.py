@@ -8,7 +8,7 @@ from django.shortcuts import render, redirect
 
 from main.models import Experience, Skill, Interest
 
-from .forms import SkillForm
+from .forms import ExperienceForm, SkillForm
 
 def show_main(request):
     context = {
@@ -30,6 +30,22 @@ def show_experience(request):
         "experience_list": Experience.objects.all(),
     }
     return render(request, "experience.html", context)
+
+def show_experience_form(request):
+    form = ExperienceForm()
+
+    if request.method == "POST":
+        form = ExperienceForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect("main:show_experience")
+
+    context = {
+        "form": form,
+    }
+
+    return render(request, "experience_form.html", context)
 
 
 def show_skills(request):
