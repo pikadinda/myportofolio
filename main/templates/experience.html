@@ -12,6 +12,10 @@ Experience - Pika
             <p class="section-kicker">My journey so far</p>
             <h1>Experience</h1>
 
+            <a href="{% url 'main:show_experience_form' %}">
+                Add Experience
+            </a>
+
             <div class="experience-grid">
                 {% for experience in experience_list %}
                     <article class="experience-card">
