@@ -4,7 +4,7 @@
 from django.core import serializers
 from django.http import HttpResponse
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from main.models import Experience, Skill, Interest
 
@@ -47,6 +47,25 @@ def show_experience_form(request):
 
     return render(request, "experience_form.html", context)
 
+
+def edit_experience(request, experience_id):
+    experience = get_object_or_404(Experience, id=experience_id)
+
+    if request.method == "POST":
+        form = ExperienceForm(request.POST, instance=experience)
+
+        if form.is_valid():
+            form.save()
+            return redirect("main:show_experience")
+    else:
+        form = ExperienceForm(instance=experience)
+
+    context = {
+        "form": form,
+        "experience": experience,
+    }
+
+    return render(request, "experience_form.html", context)
 
 def show_skills(request):
     json_response = get_skills_json(request)

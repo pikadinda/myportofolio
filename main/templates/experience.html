@@ -32,6 +32,11 @@ Experience - Pika
                         {% else %}
                             <p class="experience-status">Selesai</p>
                         {% endif %}
+
+                        <a href="{% url 'main:edit_experience' experience.id %}">
+                            Edit
+                        </a>
+                        
                     </article>
                 {% empty %}
                     <p class="empty-state">
