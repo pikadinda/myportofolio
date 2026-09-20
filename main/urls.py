@@ -19,6 +19,13 @@ urlpatterns = [
         views.delete_experience,
         name="delete_experience",
     ),
+
+    path(
+    "api/experiences/",
+    views.get_experiences_json,
+    name="get_experiences_json",
+    ),
+    
     path("skills/", views.show_skills, name="show_skills"),
     path("interests/", views.show_interests, name="show_interests"),
     path("skills/add/", views.show_skill_form, name="show_skill_form"),

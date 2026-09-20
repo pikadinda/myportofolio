@@ -25,11 +25,30 @@ def show_main(request):
 
 
 def show_experience(request):
+    json_response = get_experiences_json(request)
+
+    experiences = serializers.deserialize(
+        "json",
+        json_response.content.decode("utf-8"),
+    )
+
+    experiences = [experience.object for experience in experiences]
+
     context = {
         "name": "Adinda Pika Fauziah",
-        "experience_list": Experience.objects.all(),
+        "experience_list": experiences,
     }
     return render(request, "experience.html", context)
+
+def get_experiences_json(request):
+    experiences = Experience.objects.all()
+
+    experiences_json = serializers.serialize("json", experiences)
+
+    return HttpResponse(
+        experiences_json,
+        content_type="application/json",
+    )
 
 def show_experience_form(request):
     form = ExperienceForm()
