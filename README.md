@@ -45,5 +45,13 @@ Jawaban dari Pertanyaan Reflektif
 ### AI Disclosure
 Dalam pengerjaan tugas 02 ini, saya menggunakan ChatGPT sebagai alat bantu untuk debugging, menyusun unit test, dan memeriksa kelengkapan implementasi. Saya tetap melakukan implementasi, pengujian, dan verifikasi perubahan secara langsung pada project.
 
+### Tugas 3
+Jawaban dari pertanyaan reflektif Tugas 3
 
+1. Kita menggunakan ModelForm pada Django alih-alih membuat form HTML secara  manual karena bisa menghubungan form secara langsung dengan model, sehingga field form bisa dibuat berdasarkan field pada model & proses validasi dan juga penyimpanandata jadi lebih mudah.
+Dengan ModelForm, kita ga perlu membuat field form HTML manual.
+{%csrf_token %} ditambahkan pada form untuk membantu melindungi aplikasi dari cross site request forgery, serangan yang bisa membuat req tidak atas nama pengguna
 
+2. Format data JSON lebih disukai (diabnding XML) karena formatnya lebih ringkas & lebih mudah dibaca serta diprose oleh aplikasi.
+
+3. Saat view mengembalikan data portofolio dalam bentuk JSON, data dari model Django diambil dari database dulu. Setelah itu, data tersebut diubah dari  Django menjadi format JSson menggunakan proses serialization. JSON kemudian dikembalikan melalui HTTP response dengan tipe aplication/json. Serialization diperlukan karena model Django ga bisa langsung dikirim sebagai JSON, sehingga datanya perlu dikonversi ke format yang dapat dikirim melalui response dan diproses oleh aplikasi lain dulu
