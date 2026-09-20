@@ -67,6 +67,13 @@ def edit_experience(request, experience_id):
 
     return render(request, "experience_form.html", context)
 
+def delete_experience(request, experience_id):
+    if request.method == "POST":
+        experience = get_object_or_404(Experience, id=experience_id)
+        experience.delete()
+
+    return redirect("main:show_experience")
+
 def show_skills(request):
     json_response = get_skills_json(request)
     skills = serializers.deserialize(

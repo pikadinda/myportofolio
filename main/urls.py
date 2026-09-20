@@ -13,8 +13,12 @@ urlpatterns = [
         "experience/<uuid:experience_id>/edit/",
         views.edit_experience,
         name="edit_experience",
-),
-
+    ),
+    path(
+        "experience/<uuid:experience_id>/delete/",
+        views.delete_experience,
+        name="delete_experience",
+    ),
     path("skills/", views.show_skills, name="show_skills"),
     path("interests/", views.show_interests, name="show_interests"),
     path("skills/add/", views.show_skill_form, name="show_skill_form"),
