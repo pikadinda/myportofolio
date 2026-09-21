@@ -55,3 +55,7 @@ Dengan ModelForm, kita ga perlu membuat field form HTML manual.
 2. Format data JSON lebih disukai (diabnding XML) karena formatnya lebih ringkas & lebih mudah dibaca serta diprose oleh aplikasi.
 
 3. Saat view mengembalikan data portofolio dalam bentuk JSON, data dari model Django diambil dari database dulu. Setelah itu, data tersebut diubah dari  Django menjadi format JSson menggunakan proses serialization. JSON kemudian dikembalikan melalui HTTP response dengan tipe aplication/json. Serialization diperlukan karena model Django ga bisa langsung dikirim sebagai JSON, sehingga datanya perlu dikonversi ke format yang dapat dikirim melalui response dan diproses oleh aplikasi lain dulu
+
+### AI Disclosure
+Dalamm tugas 03 ini, saya menggunakan Gemini Ai untuk membantu memahami instruksi tugas dan membantu debugging ketika terdapat error pada kode di terminal. contohnya untuk cek sebenernya mana yang salah (membatu memahami teks error).
+Prompt yang saya gunnakan itu fokusnya pada pemeriksaan error dan verifikasi implementasi terhadap requirement tugas.
