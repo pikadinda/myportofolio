@@ -91,9 +91,12 @@ def show_experience(request):
 
     experiences = [experience.object for experience in experiences]
 
+    is_editor = request.user.groups.filter(name="Editor").exists()
+
     context = {
         "name": "Adinda Pika Fauziah",
         "experience_list": experiences,
+        "is_editor": is_editor,
     }
     return render(request, "experience.html", context)
 
@@ -110,7 +113,11 @@ def get_experiences_json(request):
         content_type="application/json",
     )
 
+@login_required(login_url="/login/")
 def show_experience_form(request):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+     
     form = ExperienceForm()
 
     if request.method == "POST":
@@ -128,6 +135,7 @@ def show_experience_form(request):
 
 @login_required(login_url="/login/")
 def edit_experience(request, experience_id):
+    is_editor = request.user.groups.filter(name="Editor").exists()
     if not request.user.is_superuser:
         raise PermissionDenied
 
