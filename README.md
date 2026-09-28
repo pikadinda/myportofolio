@@ -59,3 +59,21 @@ Dengan ModelForm, kita ga perlu membuat field form HTML manual.
 ### AI Disclosure
 Dalamm tugas 03 ini, saya menggunakan Gemini Ai untuk membantu memahami instruksi tugas dan membantu debugging ketika terdapat error pada kode di terminal. contohnya untuk cek sebenernya mana yang salah (membatu memahami teks error).
 Prompt yang saya gunnakan itu fokusnya pada pemeriksaan error dan verifikasi implementasi terhadap requirement tugas.
+
+
+### Tugas 4
+Pada Tugas 4 PBP ini, saya menerapkan sistem autentikasi dan otorisasi pada bagian Experience di website portfolio saya. Ketentuan aksesnya dibagi menjadi 4 sebagai berikut:
+
+1. Pengunjung tanpa login bisa melihat data experience, tetapi harus login untuk melakukan tindakan yang membutuhkan akun. Jadi aksesnya hanya "MELIHAT" saja.
+2. Pengguna biasa bisa melihat Experience dan memberikan atau membatalkan star, tetapi tidak bisa membuat, mengedit, atau menghapus Experience.
+3. Editor bisa melihat Experience, memberikan atau membatalkan star, dan mengedit Experience yang sudah ada, tetapi tidak bisa membuat atau menghapus Experience.
+4. Superuser sebagai pemilik portfolio bisa membuat, mengedit, menghapus Experience, serta memberikan atau membatalkan star.
+
+Role Editor ini dibuat dengan Django Group melalui Django Admin. Tombol yang tidak bisa digunakan oleh suatu role juga disembunyikan pada template.
+
+Fitur star menggunakan `ManyToManyField` antara model `Experience` dan model `User`. Pengguna yang sudah login bisa memberikan atau membatalkan star. Sistem juga menampilkan jumlah star dan status star dari pengguna yang sedang login.
+
+### AI Disclosure
+Dalam pengerjaan Tugas 4 ini, saya menggunakan ChatGPT sebagai alat bantu untuk memahami materi authentication, authorization, Django Group, serta ManyToManyField. Saya juga menggunakan ChatGPT dengan memberikan potongan kode yang sedang dikerjakan, hasil `python manage.py check`, hasil pengujian pada browser, serta pesan error yang muncul. Jadi saya meminta bantuan untuk mengidentifikasi penyebab masalah dan menentukan langkah perbaikan berikutnya.
+
+Saya menjalankan command Django dan Git sendiri, menguji fitur melalui browser menggunakan beberapa role pengguna, dan melakukan koreksi ketika hasil implementasi tidak sesuai dengan struktur project saya.
