@@ -1,6 +1,7 @@
 
 
 # Create your views here.
+import datetime
 from django.core import serializers
 from django.http import HttpResponse
 
@@ -10,7 +11,62 @@ from main.models import Experience, Skill, Interest
 
 from .forms import ExperienceForm, SkillForm
 
+from django.contrib import messages
+from django.contrib.auth import login, logout
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
+
+
+def register(request):
+    form = UserCreationForm(request.POST or None)
+
+    if request.method == "POST" and form.is_valid():
+        form.save()
+        messages.success(request, "Akun berhasil dibuat. Silakan login.")
+        return redirect("main:login")
+
+    context = {
+        "name": "Adinda Pika Fauziah",
+        "form": form,
+    }
+
+    return render(request, "register.html", context)
+
+def login_user(request):
+    form = AuthenticationForm(request, data=request.POST or None)
+    if request.method == "POST" and form.is_valid():
+        user = form.get_user()
+        login(request, user)
+
+        response = redirect("main:show_main")
+        response.set_cookie(
+            "last_login",
+            datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        )
+
+        return response
+
+    context = {
+        "name": "Adinda Pika Fauziah",
+        "form": form,
+    }
+
+    return render(request, "login.html", context)
+
+def logout_user(request):
+    logout(request)
+
+    response = redirect("main:show_main")
+    response.delete_cookie("last_login")
+    return response
+
 def show_main(request):
+    last_login = request.COOKIES.get(
+    "last_login",
+    "Belum ada sesi login / Cookie tidak ditemukan"
+    )
+
     context = {
         "name": "Adinda Pika Fauziah",
         "npm": "2506533646",
@@ -20,6 +76,7 @@ def show_main(request):
             "Just a student who enjoys documenting life through photos, discovering great bakeries, and keeping things simple."
            
         ),
+        "last_login": last_login,
     }
     return render(request, "index.html", context)
 
@@ -42,8 +99,11 @@ def show_experience(request):
 
 def get_experiences_json(request):
     experiences = Experience.objects.all()
-
-    experiences_json = serializers.serialize("json", experiences)
+    experiences_json = serializers.serialize(
+        "json",
+        experiences,
+        use_natural_foreign_keys=True,
+        )
 
     return HttpResponse(
         experiences_json,
@@ -66,8 +126,11 @@ def show_experience_form(request):
 
     return render(request, "experience_form.html", context)
 
-
+@login_required(login_url="/login/")
 def edit_experience(request, experience_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+
     experience = get_object_or_404(Experience, id=experience_id)
 
     if request.method == "POST":
@@ -86,7 +149,11 @@ def edit_experience(request, experience_id):
 
     return render(request, "experience_form.html", context)
 
+@login_required(login_url="/login/")
 def delete_experience(request, experience_id):
+    if not request.user.is_superuser:
+        raise PermissionDenied
+    
     if request.method == "POST":
         experience = get_object_or_404(Experience, id=experience_id)
         experience.delete()
@@ -159,5 +226,18 @@ def show_education(request):
         "name": "Adinda Pika Fauziah",
     }
     return render(request, "education.html", context)
+
+@login_required(login_url="/login/")
+def toggle_star(request, experience_id):
+    experience = get_object_or_404(Experience, pk=experience_id)
+
+    if request.method == "POST":
+        if request.user in experience.starred_by.all():
+            experience.starred_by.remove(request.user)
+        else:
+            experience.starred_by.add(request.user)
+
+    return redirect("main:show_experience")
+
 
 

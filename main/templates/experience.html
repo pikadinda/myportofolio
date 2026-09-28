@@ -33,13 +33,20 @@ Experience - Pika
                             <p class="experience-status">Selesai</p>
                         {% endif %}
 
+                        {% if user.is_superuser %}
                         <a href="{% url 'main:edit_experience' experience.id %}">
                             Edit
                         </a>
+                        {% endif %}
+
+                        {% include "components/experience_star.html" with experience=experience %}
+                        
+                        {% if user.is_superuser %}
                         <form method="POST" action="{% url 'main:delete_experience' experience.id %}">
                             {% csrf_token %}
                             <button type="submit">Delete</button>
                         </form>
+                        {% endif %}
 
 
                     </article>

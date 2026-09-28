@@ -3,8 +3,15 @@
 # Create your models here.
 import uuid
 from django.db import models
+from django.contrib.auth.models import User
 
 class Experience(models.Model):
+    starred_by = models.ManyToManyField(
+        User,
+        related_name="starred_projects",
+        blank=True
+    )
+
     EXPERIENCE_CHOICES = [
         ('internship', 'Internship'),
         ('research', 'Research'),

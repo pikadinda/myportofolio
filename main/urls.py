@@ -31,4 +31,12 @@ urlpatterns = [
     path("skills/add/", views.show_skill_form, name="show_skill_form"),
     path("api/skills/", views.get_skills_json, name="get_skills_json"),
     path("skills/<int:skill_id>/delete/", views.delete_skill, name="delete_skill"),
+    path("register/", views.register, name="register"),
+    path("login/", views.login_user, name="login"),
+    path("logout/", views.logout_user, name="logout"),
+    path(
+        "experience/<uuid:experience_id>/star/",
+        views.toggle_star,
+        name="toggle_star",
+    ),
 ]
