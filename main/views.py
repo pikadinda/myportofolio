@@ -136,7 +136,7 @@ def show_experience_form(request):
 @login_required(login_url="/login/")
 def edit_experience(request, experience_id):
     is_editor = request.user.groups.filter(name="Editor").exists()
-    if not request.user.is_superuser:
+    if not request.user.is_superuser and not is_editor:
         raise PermissionDenied
 
     experience = get_object_or_404(Experience, id=experience_id)
