@@ -92,9 +92,15 @@ def show_experience(request):
     return render(request, "experience.html", context)
 
 def get_experiences_json(request):
+    search_query = request.GET.get("title", "").strip()
+
     experiences = Experience.objects.prefetch_related("starred_by").all()
 
+    if search_query:
+        experiences = experiences.filter(title__icontains=search_query)
+
     data = []
+    
     for experience in experiences:
         starred_users = experience.starred_by.all()
 

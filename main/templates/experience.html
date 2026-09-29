@@ -2,6 +2,7 @@
 
 {% block title %}
 Experience - Pika
+
 {% endblock title %}
 
 {% block content %}
@@ -22,6 +23,20 @@ Experience - Pika
 
             <p class="section-kicker">My journey so far</p>
             <h1>Experience</h1>
+            <form id="experience-search-form" class="project-search">
+                <input
+                    type="search"
+                    id="search-input"
+                    name="title"
+                    placeholder="Cari berdasarkan judul experience"
+                    class="project-search__input"
+                    aria-label="Cari berdasarkan judul experience"
+                >
+
+                <button type="submit" class="button">
+                    Cari
+                </button>
+            </form>
 
             {% if user.is_superuser %}
             <a href="{% url 'main:show_experience_form' %}">
@@ -59,6 +74,11 @@ Experience - Pika
     const errorState = document.getElementById("error");
     const emptyState = document.getElementById("empty");
     const gridContainer = document.getElementById("grid");
+    const searchForm = document.getElementById("experience-search-form");
+    const searchInput = document.getElementById("search-input");
+
+    const SEARCH_DEBOUNCE_DELAY = 300;
+    let searchDebounceTimer;
 
     function displayPageSection({
         showLoading = false,
@@ -169,11 +189,14 @@ Experience - Pika
         return articleElement;
     }
         
-    async function fetchExperiences() {
+    async function fetchExperiences(searchQuery = "") {
         try {
             displayPageSection({ showLoading: true });
+            const url = searchQuery
+                ? `${BASE_EXPERIENCES_ENDPOINT}?title=${encodeURIComponent(searchQuery)}`
+                : BASE_EXPERIENCES_ENDPOINT;
 
-            const response = await fetch(BASE_EXPERIENCES_ENDPOINT, {
+            const response = await fetch(url, {
                 headers: {
                     "Accept": "application/json"
                 }
@@ -193,11 +216,11 @@ Experience - Pika
                 experienceData.forEach(item => {
                     gridContainer.appendChild(
                         buildExperienceCardElement(item)
-                 );
+                );
             });
 
-                displayPageSection({ showGrid: true });
-            }
+            displayPageSection({ showGrid: true });
+        }
         
 
         
@@ -210,8 +233,27 @@ Experience - Pika
     displayPageSection({ showError: true });
     }
 }
+function searchExperiences() {
+    fetchExperiences(searchInput.value.trim());
+}
 
-    fetchExperiences();
+searchInput.addEventListener("input", function () {
+    clearTimeout(searchDebounceTimer);
+
+    searchDebounceTimer = setTimeout(function () {
+        searchExperiences();
+    }, SEARCH_DEBOUNCE_DELAY);
+});
+
+searchForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    clearTimeout(searchDebounceTimer);
+    searchExperiences();
+});
+
+fetchExperiences();
+
 </script>
 
 {% endblock content %}
