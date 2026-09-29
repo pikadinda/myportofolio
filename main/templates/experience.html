@@ -11,16 +11,6 @@ Experience - Pika
     <section class="experience-section" id="experience">
         <div class="container">
 
-            <button
-                class="button button-secondary"
-                onclick="showToast(
-                    'Notifikasi Sistem',
-                    'Experience berhasil dimuat dengan baik!',
-                    'success'
-                )">
-                Test Toast Notifikasi
-            </button>
-
             <p class="section-kicker">My journey so far</p>
             <h1>Experience</h1>
             <form id="experience-search-form" class="project-search">
@@ -39,9 +29,13 @@ Experience - Pika
             </form>
 
             {% if user.is_superuser %}
-            <a href="{% url 'main:show_experience_form' %}">
-                Add Experience
-            </a>
+                <button
+                    type="button"
+                    class="button project-add-button"
+                    popovertarget="add-experience-modal">
+                    <span aria-hidden="true">+</span>
+                    Add Experience
+                </button>
             {% endif %}
 
         <div id="loading" class="empty-state hide">
@@ -60,6 +54,10 @@ Experience - Pika
         </div>
     </section>
 </main>
+
+{% if user.is_superuser %}
+    {% include "components/experience_form_modal.html" %}
+{% endif %}
 
 <script>
     const BASE_EXPERIENCES_ENDPOINT = "{% url 'main:get_experiences_json' %}";
@@ -90,6 +88,15 @@ Experience - Pika
         errorState.classList.toggle("hide", !showError);
         emptyState.classList.toggle("hide", !showEmpty);
         gridContainer.classList.toggle("hide", !showGrid);
+    }
+
+    function escapeHtml(value) {
+        return String(value ?? '')
+            .replaceAll('&', '&amp;')
+            .replaceAll('<', '&lt;')
+            .replaceAll('>', '&gt;')
+            .replaceAll('"', '&quot;')
+            .replaceAll("'", '&#39;');
     }
 
     function buildExperienceCardElement(item) {
@@ -141,7 +148,7 @@ Experience - Pika
             : "Star";
 
         const starTitle = experience.star_count > 0
-            ? `Dibintangi oleh ${experience.starred_by_names}`
+            ? `Dibintangi oleh ${escapeHtml(experience.starred_by_names)}`
             : "Jadilah yang pertama memberi star";
 
         const statusText = experience.is_ongoing
@@ -150,13 +157,13 @@ Experience - Pika
 
         articleElement.innerHTML = `
             <span class="experience-category">
-                ${experience.category}
+                ${escapeHtml(experience.category)}
             </span>
 
-            <h2>${experience.title}</h2>
+            <h2>${escapeHtml(experience.title)}</h2>
 
             <p class="experience-description">
-                ${experience.description}
+                ${escapeHtml(experience.description)}
             </p>
 
             <p class="experience-status">
@@ -253,6 +260,117 @@ searchForm.addEventListener("submit", function (event) {
 });
 
 fetchExperiences();
+
+function closeExperienceModal() {
+    document
+        .getElementById("add-experience-modal")
+        .hidePopover();
+}
+
+const CREATE_EXPERIENCE_ENDPOINT =
+    "{% url 'main:create_experience_ajax' %}";
+
+const experienceForm =
+    document.getElementById("experience-form");
+
+function getCookie(name) {
+    let cookieValue = null;
+
+    if (document.cookie && document.cookie !== "") {
+        const cookies = document.cookie.split(";");
+
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+
+            if (
+                cookie.substring(0, name.length + 1) ===
+                (name + "=")
+            ) {
+                cookieValue = decodeURIComponent(
+                    cookie.substring(name.length + 1)
+                );
+                break;
+            }
+        }
+    }
+
+    return cookieValue;
+}
+
+async function addExperience(event) {
+    event.preventDefault();
+
+    const submitButton =
+        experienceForm.querySelector(
+            'button[type="submit"]'
+        );
+
+    submitButton.disabled = true;
+
+    try {
+        const response = await fetch(
+            CREATE_EXPERIENCE_ENDPOINT,
+            {
+                method: "POST",
+                headers: {
+                    "X-CSRFToken": getCookie("csrftoken")
+                },
+                body: new FormData(experienceForm)
+            }
+        );
+
+        const result =
+            await response.json().catch(() => ({}));
+
+        if (response.ok) {
+            experienceForm.reset();
+            closeExperienceModal();
+
+            showToast(
+                "Berhasil",
+                "Experience baru berhasil ditambahkan!",
+                "success"
+            );
+
+            fetchExperiences();
+        } else {
+            const errorMessages = result.errors
+                ? Object.values(result.errors)
+                    .flat()
+                    .map(error => error.message)
+                : [
+                    result.message ||
+                    `Terjadi kesalahan (status ${response.status}).`
+                ];
+
+            showToast(
+                "Gagal menambahkan experience",
+                errorMessages.join(" "),
+                "error"
+            );
+        }
+    } catch (error) {
+        console.error(
+            "Error adding experience:",
+            error
+        );
+
+        showToast(
+            "Gagal menambahkan experience",
+            "Tidak dapat terhubung ke server. Silakan coba lagi.",
+            "error"
+        );
+    } finally {
+        submitButton.disabled = false;
+    }
+}
+
+if (experienceForm) {
+    experienceForm.addEventListener(
+        "submit",
+        addExperience
+    );
+}
 
 </script>
 

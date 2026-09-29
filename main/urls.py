@@ -39,4 +39,9 @@ urlpatterns = [
         views.toggle_star,
         name="toggle_star",
     ),
+    path(
+        "experience/add-ajax/",
+        views.create_experience_ajax,
+        name="create_experience_ajax",
+    ),
 ]
