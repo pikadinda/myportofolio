@@ -548,4 +548,9 @@ h1, .brand, .section-title {
     border-left: 4px solid var(--accent);
 }
 
+/*hide*/
+.hide {
+    display: none !important;
+}
+
 

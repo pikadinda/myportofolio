@@ -3,7 +3,7 @@
 # Create your views here.
 import datetime
 from django.core import serializers
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -82,36 +82,45 @@ def show_main(request):
 
 
 def show_experience(request):
-    json_response = get_experiences_json(request)
-
-    experiences = serializers.deserialize(
-        "json",
-        json_response.content.decode("utf-8"),
-    )
-
-    experiences = [experience.object for experience in experiences]
 
     is_editor = request.user.groups.filter(name="Editor").exists()
 
     context = {
         "name": "Adinda Pika Fauziah",
-        "experience_list": experiences,
         "is_editor": is_editor,
     }
     return render(request, "experience.html", context)
 
 def get_experiences_json(request):
-    experiences = Experience.objects.all()
-    experiences_json = serializers.serialize(
-        "json",
-        experiences,
-        use_natural_foreign_keys=True,
+    experiences = Experience.objects.prefetch_related("starred_by").all()
+
+    data = []
+    for experience in experiences:
+        starred_users = experience.starred_by.all()
+
+        is_starred = (
+            request.user in starred_users
+            if request.user.is_authenticated
+            else False
         )
 
-    return HttpResponse(
-        experiences_json,
-        content_type="application/json",
-    )
+        starred_by_names = ", ".join(
+            [user.username for user in starred_users]
+        )
+        data.append({
+            "pk": str(experience.id),
+            "fields": {
+                "title": experience.title,
+                "description": experience.description,
+                "category": experience.get_category_display(),
+                "is_ongoing": experience.is_ongoing,
+                "star_count": starred_users.count(),
+                "is_starred": is_starred,
+                "starred_by_names": starred_by_names,
+            },
+        })
+
+    return JsonResponse(data, safe=False)
 
 @login_required(login_url="/login/")
 def show_experience_form(request):
