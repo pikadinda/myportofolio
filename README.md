@@ -77,3 +77,14 @@ Fitur star menggunakan `ManyToManyField` antara model `Experience` dan model `Us
 Dalam pengerjaan Tugas 4 ini, saya menggunakan ChatGPT sebagai alat bantu untuk memahami materi authentication, authorization, Django Group, serta ManyToManyField. Saya juga menggunakan ChatGPT dengan memberikan potongan kode yang sedang dikerjakan, hasil `python manage.py check`, hasil pengujian pada browser, serta pesan error yang muncul. Jadi saya meminta bantuan untuk mengidentifikasi penyebab masalah dan menentukan langkah perbaikan berikutnya.
 
 Saya menjalankan command Django dan Git sendiri, menguji fitur melalui browser menggunakan beberapa role pengguna, dan melakukan koreksi ketika hasil implementasi tidak sesuai dengan struktur project saya.
+
+### Tugas 5
+1. Debouncing adalah teknik untuk menunda eksekusi fungsi sampai tidak ada event baru yang terjadi selama interval waktu tertentu. Pada fitur pencarian yang pakai AJAX, debouncing berguna agar browser tidak mengirim request ke server untuk setiap karakter yang diketik
+
+2. `await` digunakan untuk menunggu promise dari `fetch()` selesai sebelum program melanjutkan ke baris berikutnya. Penggunaan `await` akan menghasilkan response dari server dapat digunakan secara berurutan sehingga kode lebih mudah dibaca dan dipahami. Jika `await` tidak digunakan, Promise masih berjalan ketika kode berikutnya dieksekusi sehingga hasil response belum tentu tersedia saat dibutuhkan
+
+3. XSS adalah serangan ketika data yang tidak aman dapat diperlakukan sebagai HTML/JavaScript oleh browser sehingga kode berbahaya dapat dijalankan. Data yang ditampilkan melalui AJAX dan JavaScript lebih rentan jika dimasukkan langsung menggunakan `innerHTML`, karena data tersebut tidak lagi melalui auto-escaping template Django. Pada tugas saya ini, data dari JSON di-escape menggunakan `escapeHtml()` sebelum dimasukkan ke HTML, dan input teks juga dibersihkan di sisi server menggunakan `strip_tags()` pada method `clean_<field>` di `ExperienceForm`
+
+
+### AI Disclosure
+Pada tugas 05 ini, saya tidak menggunakan Gen AI dalam proses pengerjaannya. Saya meneruskan hasil pengerjaan saya pada tutorial 05 untuk tugas 05 saya ini.
