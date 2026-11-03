@@ -2,6 +2,8 @@ from django.urls import path
 
 from . import views
 
+
+
 app_name = "main"
 
 urlpatterns = [
@@ -44,4 +46,5 @@ urlpatterns = [
         views.create_experience_ajax,
         name="create_experience_ajax",
     ),
+    
 ]
