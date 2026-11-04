@@ -22,3 +22,8 @@ urlpatterns = [
     path("", include("main.urls")),
     path('contacts/', include('contacts.urls')),
 ]
+
+urlpatterns += [
+    path("api/v1/", include("main.api_urls")),
+    path("api-auth/", include("rest_framework.urls")),
+]
