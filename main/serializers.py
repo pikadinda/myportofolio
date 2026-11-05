@@ -28,7 +28,15 @@ class ExperienceSerializer(serializers.ModelSerializer):
             "is_starred",
             "starred_by_names",
         ]
-        read_only_fields = ["id", "started_at"]
+        read_only_fields = [
+            "id",
+            "started_at",
+            "category_display",
+            "is_ongoing",
+            "star_count",
+            "is_starred",
+            "starred_by_names",
+        ]
 
     def validate_title(self, value):
         value = strip_tags(value).strip()
@@ -39,7 +47,14 @@ class ExperienceSerializer(serializers.ModelSerializer):
         return value
 
     def validate_description(self, value):
-        return strip_tags(value).strip()
+        value = strip_tags(value).strip()
+
+        if not value:
+            raise serializers.ValidationError(
+                "Deskripsi experience tidak boleh kosong."
+            )
+
+        return value
 
     def get_category_display(self, obj):
         return obj.get_category_display()
