@@ -24,6 +24,17 @@ class ExperienceAPITest(APITestCase):
             password="test-password",
         )
 
+        self.editor_group = Group.objects.create(
+            name="Editor"
+        )
+
+        self.editor = User.objects.create_user(
+            username="editor",
+            password="test-password",
+        )
+
+        self.editor.groups.add(self.editor_group)
+
         self.experience = Experience.objects.create(
             title="Portfolio Experience",
             description="My portfolio experience",
@@ -334,24 +345,20 @@ class ExperienceAPITest(APITestCase):
 
         self.assertEqual(response.data["starred_by_names"], "")
 
+    
     def test_staff_and_editor_permissions(self):
-
         staff = User.objects.create_user(
             username="staff",
             password="test-password",
             is_staff=True,
         )
 
-        editor = User.objects.create_user(
-            username="editor",
-            password="test-password",
-        )
+        experience_id = self.experience.pk
 
-        editor_group, _ = Group.objects.get_or_create(
-            name="Editor",
-        )
-
-        editor.groups.add(editor_group)
+        # Simpan kondisi awal Experience.
+        self.experience.refresh_from_db()
+        original_title = self.experience.title
+        original_count = Experience.objects.count()
 
         # Staff tanpa grup Editor tidak boleh mengubah Experience.
         self.client.force_authenticate(user=staff)
@@ -367,8 +374,17 @@ class ExperienceAPITest(APITestCase):
             status.HTTP_403_FORBIDDEN,
         )
 
+        # Pastikan database tidak berubah setelah PATCH ditolak.
+        self.experience.refresh_from_db()
+
+        self.assertEqual(self.experience.title, original_title)
+        self.assertEqual(
+            Experience.objects.count(),
+            original_count,
+        )
+
         # Editor boleh melakukan PATCH.
-        self.client.force_authenticate(user=editor)
+        self.client.force_authenticate(user=self.editor)
 
         response = self.client.patch(
             self.detail_url,
@@ -379,6 +395,13 @@ class ExperienceAPITest(APITestCase):
         self.assertEqual(
             response.status_code,
             status.HTTP_200_OK,
+        )
+
+        self.experience.refresh_from_db()
+
+        self.assertEqual(
+            self.experience.title,
+            "Editor Update",
         )
 
         # Editor juga boleh melakukan PUT.
@@ -393,7 +416,16 @@ class ExperienceAPITest(APITestCase):
             status.HTTP_200_OK,
         )
 
+        self.experience.refresh_from_db()
+
+        self.assertEqual(
+            self.experience.title,
+            self.payload["title"],
+        )
+
         # Editor tidak boleh membuat Experience.
+        count_before_create = Experience.objects.count()
+
         response = self.client.post(
             self.list_url,
             self.payload,
@@ -405,13 +437,42 @@ class ExperienceAPITest(APITestCase):
             status.HTTP_403_FORBIDDEN,
         )
 
+        # Pastikan database tidak bertambah.
+        self.assertEqual(
+            Experience.objects.count(),
+            count_before_create,
+        )
+
         # Editor tidak boleh menghapus Experience.
+        title_before_delete = self.experience.title
+        count_before_delete = Experience.objects.count()
+
         response = self.client.delete(self.detail_url)
 
         self.assertEqual(
             response.status_code,
             status.HTTP_403_FORBIDDEN,
         )
+
+        # Pastikan data masih ada dan tidak berubah.
+        self.assertEqual(
+            Experience.objects.count(),
+            count_before_delete,
+        )
+
+        self.assertTrue(
+            Experience.objects.filter(
+                pk=experience_id
+            ).exists()
+        )
+
+        self.experience.refresh_from_db()
+
+        self.assertEqual(
+            self.experience.title,
+            title_before_delete,
+        )
+
 
     def test_wrong_method(self):
         self.client.force_authenticate(user=self.owner)
