@@ -59,6 +59,10 @@ Experience - Pika
     {% include "components/experience_form_modal.html" %}
 {% endif %}
 
+{% if user.is_superuser or is_editor %}
+    {% include "components/experience_edit_modal.html" %}
+{% endif %}
+
 {% csrf_token %}
 
 <script>
@@ -94,6 +98,12 @@ Experience - Pika
 
     const experienceForm =
         document.getElementById("experience-form");
+
+    const editExperienceForm =
+        document.getElementById("edit-experience-form");
+
+    const editExperienceModal =
+        document.getElementById("edit-experience-modal");
 
     let experiencesAbortController;
     let searchDebounceTimer;
@@ -150,13 +160,6 @@ Experience - Pika
 
         const experienceId = escapeHtml(experience.id);
 
-        const editUrl =
-            "{% url 'main:edit_experience' '00000000-0000-0000-0000-000000000000' %}"
-                .replace(
-                    "00000000-0000-0000-0000-000000000000",
-                    experienceId
-                );
-
         const starUrl = experienceEndpoint(
             STAR_EXPERIENCE_ENDPOINT,
             experienceId
@@ -175,9 +178,13 @@ Experience - Pika
 
         const editHtml = IS_SUPERUSER || IS_EDITOR
             ? `
-                <a href="${escapeHtml(editUrl)}">
+                <button
+                    type="button"
+                    class="button button-edit"
+                    data-action="edit"
+                    data-id="${experienceId}">
                     Edit
-                </a>
+                </button>
             `
             : "";
 
@@ -336,6 +343,139 @@ Experience - Pika
         return data;
     }
 
+    
+    async function openEditExperience(button) {
+        const experienceId = button.dataset.id;
+
+        button.disabled = true;
+
+        try {
+            const url = experienceEndpoint(
+                DETAIL_EXPERIENCE_ENDPOINT,
+                experienceId
+            );
+
+            const response = await fetch(url, {
+                method: "GET",
+                headers: {
+                    Accept: "application/json"
+                }
+            });
+
+            const data = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                throw new Error(
+                    apiErrorMessage(data, response.status)
+                );
+            }
+
+            if (!editExperienceForm || !editExperienceModal) {
+                throw new Error("Modal edit Experience tidak ditemukan.");
+            }
+
+            editExperienceForm.dataset.experienceId = experienceId;
+
+            document.getElementById("edit-title").value =
+                data.title ?? "";
+
+            document.getElementById("edit-description").value =
+                data.description ?? "";
+
+            document.getElementById("edit-category").value =
+                data.category ?? "full-time";
+
+            document.getElementById("edit-thumbnail").value =
+                data.thumbnail ?? "";
+
+            editExperienceModal.showPopover();
+
+        } catch (error) {
+            console.error("Error opening edit modal:", error);
+
+            showToast(
+                "Gagal membuka Experience",
+                error.message,
+                "error"
+            );
+
+        } finally {
+            button.disabled = false;
+        }
+    }
+
+    
+    async function updateExperience(event) {
+        event.preventDefault();
+
+        const submitButton = editExperienceForm.querySelector(
+            'button[type="submit"]'
+        );
+
+        const experienceId =
+            editExperienceForm.dataset.experienceId;
+
+        if (!experienceId) {
+            showToast(
+                "Gagal",
+                "ID Experience tidak ditemukan.",
+                "error"
+            );
+            return;
+        }
+
+        // Ambil nilai dari form edit.
+        const payload = {
+            title: document.getElementById("edit-title").value,
+            description: document.getElementById("edit-description").value,
+            category: document.getElementById("edit-category").value,
+            thumbnail: document.getElementById("edit-thumbnail").value.trim()
+        };
+
+        submitButton.disabled = true;
+
+        try {
+            const url = experienceEndpoint(
+                DETAIL_EXPERIENCE_ENDPOINT,
+                experienceId
+            );
+
+            // Kirim perubahan melalui API DRF menggunakan PATCH.
+            await writeExperience(
+                url,
+                "PATCH",
+                payload
+            );
+
+            // Tutup modal setelah berhasil.
+            editExperienceModal.hidePopover();
+
+            showToast(
+                "Berhasil",
+                "Experience berhasil diperbarui!",
+                "success"
+            );
+
+            // Muat ulang data melalui API, bukan reload halaman.
+            await fetchExperiences(
+                searchInput.value.trim()
+            );
+
+        } catch (error) {
+            console.error("Error updating Experience:", error);
+
+            showToast(
+                "Gagal memperbarui Experience",
+                error.message,
+                "error"
+            );
+
+        } finally {
+            submitButton.disabled = false;
+        }
+    }
+
+
 
     function closeExperienceModal() {
 
@@ -420,6 +560,13 @@ Experience - Pika
         );
     }
 
+    if (editExperienceForm) {
+        editExperienceForm.addEventListener(
+            "submit",
+            updateExperience
+        );
+    }
+
 
     gridContainer.addEventListener("click", async function(event) {
 
@@ -432,6 +579,17 @@ Experience - Pika
         }
 
         const action = button.dataset.action;
+
+        // edit secara terpisah
+        if (action === "edit") {
+            await openEditExperience(button);
+            return;
+        }
+
+        //cuman izinkan aksi star dan delete
+        if (action !== "star" && action !== "delete") {
+            return;
+        }
 
         if (
             action === "delete" &&

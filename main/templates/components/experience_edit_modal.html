@@ -1,0 +1,109 @@
+
+<div
+    id="edit-experience-modal"
+    class="project-form-modal"
+    popover="auto"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="edit-experience-modal-title"
+>
+    <button
+        type="button"
+        class="project-form-modal__backdrop"
+        popovertarget="edit-experience-modal"
+        popovertargetaction="hide"
+        aria-label="Tutup form edit experience"
+    ></button>
+
+    <div class="project-form-modal__content">
+
+        <button
+            type="button"
+            class="project-form-modal__close"
+            popovertarget="edit-experience-modal"
+            popovertargetaction="hide"
+            aria-label="Tutup form edit experience"
+        >
+            ×
+        </button>
+
+        <h2 id="edit-experience-modal-title">
+            Edit Experience
+        </h2>
+
+        <form
+            id="edit-experience-form"
+            class="project-form"
+            method="post"
+        >
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="edit-title">Judul Experience</label>
+                <input
+                    type="text"
+                    id="edit-title"
+                    name="title"
+                    maxlength="255"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="edit-description">Deskripsi</label>
+                <textarea
+                    id="edit-description"
+                    name="description"
+                    rows="4"
+                    required
+                ></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-category">Kategori</label>
+                <select
+                    id="edit-category"
+                    name="category"
+                    required
+                >
+                    {% for value, label in form.fields.category.choices %}
+                        <option value="{{ value }}">
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="edit-thumbnail">Thumbnail URL</label>
+                <input
+                    type="url"
+                    id="edit-thumbnail"
+                    name="thumbnail"
+                >
+            </div>
+
+            <div class="project-form-modal__actions">
+
+                <button
+                    type="button"
+                    class="button button-secondary"
+                    popovertarget="edit-experience-modal"
+                    popovertargetaction="hide"
+                >
+                    Batal
+                </button>
+
+                <button
+                    type="submit"
+                    class="button"
+                >
+                    Simpan Perubahan
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
