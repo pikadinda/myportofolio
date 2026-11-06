@@ -88,3 +88,33 @@ Saya menjalankan command Django dan Git sendiri, menguji fitur melalui browser m
 
 ### AI Disclosure
 Pada tugas 05 ini, saya tidak menggunakan Gen AI dalam proses pengerjaannya. Saya meneruskan hasil pengerjaan saya pada tutorial 05 untuk tugas 05 saya ini.
+
+### Tugas 6
+1. REST adalah aturan dalam membuat API agar hubungn antara frontend dan backend lebih terstruktur. REST tidak hanya mengatur format data, tetapi juga cara mengakses resource menggunakan URL, HTTP method, dan status code yang sesuai.
+
+API yang mengembalikan JSON saja belum tentu RESTful. API tersebut juga perlu mengikuti prinsip REST, yaitu menggunakan GET untuk mengambil data, POST untuk menambah data, PUT atau PATCH untuk memperbarui data, dan DELETE untuk menghapus data.
+
+Perbedaan PUT dan PATCH adalah PUT digunakan untuk mengganti seluruh data dalam sebuah resource, sedangkan PATCH hanya mengubah bagian tertentu. Contohnya, kalau ingin mengganti seluruh informasi Experience, gunakan PUT. Kalau hanya ingin mengganti judul Experience tapi tidak mengubah deskripsi atau kategori, gunakan PATCH.
+
+2. Serializer berfungsi untuk mengubah data dari model Django menjadi format yang bisa dikirim melalui API, seperti JSON. 
+
+Dibandingkan membuat dictionary secara manual seperti pada Tutorial 05, serializer lebih praktis karena prosesnya bisa dilakukan di satu tempat. Kodenya juga lebih rapi dan mudah dikelola. Contohnya pada Experience, serializer digunakan untuk mengatur data yang dikirim melalui API sekaligus menghitung jumlah star dan mengecek apakah pengguna sudah memberikan star.
+
+3. Autentikasi adalah proses untuk memastikan siapa pengguna yang sedang mengakses aplikasi. Otorisasi adalah proses untuk menentukan apa saja yang boleh dilakukan oleh pengguna tersebut.
+
+Contohnya adalah autentikasi digunakan untuk mengetahui bahwa seseorang itu sudah login sebagai Editor. Setelah itu, otorisasi menentukan apakah Editor tersebut boleh mengubah data Experience atau tidak.
+
+Pemeriksaan permission harus dilakukan di server karena kalau menyembunyikan tombol di template aja tidak cukup aman. Pengguna masih bisa mengirim request API secara langsung tanpa menekan tombol di halaman. Dengan permission class, server bisa memeriksa hak akses setiap request jadi pengguna tidak bisa melakukan tindakan yang bukan haknya.
+
+4. SessionAuthentication menggunakan cookie session untuk mengenali pengguna yang sudah login. Lalu browser mengirimkan cookie tersebut secara otomatis saat melakukan request. Alur ini bisa dimanfaatkan oleh pihak lain untuk mencoba mengirim request tanpa sepengetahuan pengguna.
+
+JAdi, request yang mengubah data seperti POST, PUT, PATCH, dan DELETE perlu menyertakan token CSRF. Token ini membantu memastikan bahwa request memang berasal dari halaman aplikasi yang seharusnya.
+
+force_authenticate tidak cukup untuk menguji CSRF karena metode tersebut langsung menganggap pengguna sudah terautentikasi tanpa melewati proses session authentication yang normal. Akibatnya, pemeriksaan CSRF tidak benar-benar diuji. Untuk memastikan perlindungan CSRF berjalan, perlu menggunakan APIClient(enforce_csrf_checks=True) dan mencoba mengirim request tanpa token (seharusnya ditolak oleh server).
+
+#### AI Disclosure
+Saya menggunakan ChatGPT sebagai alat bantu dalam pengerjaan Tugas 6. Penggunaan ChatGPT ini untuk mengecek ketika ada eror dalam proses pengujian code saya
+
+Saat hasil pengujian yang saya jalankan ada menunjukkan bahwa API tests tidak berhasil/ ada eror dan 25 tests pada aplikasi `main` masih ada eror, saya menggunakan ChatGPT untuk mengetahui bagaimana cara solve nya. 
+
+Setelah itu, saya memverifikasi implementasi melalui pengujian dan pemeriksaan manual sebelum menyimpan perubahan ke repository.
